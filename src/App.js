@@ -4,36 +4,43 @@ import "./App.css";
 function App() {
   const url = "https://jsonplaceholder.typicode.com/users";
 const [data , setData] = useState([])
-const [email,setEmail]=useState();
 
+  // For Get Api call//
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
       .then((json)=>{
-              console.log(json);
+            //  console.log(json);
               setData(json);
           })
       .catch((e) => console.log("e", e));
   }, []);
 
+  //For Post Api  Call//
+
   const AddPost = ()=>{
 
+      const  datap={
+          name: "Pankaj",
+          email:'pankaj@123',
+          phone:'385421',
+          username: "Pankaj Prajapati"
+        }
      fetch(url, {
        method: "POST", // or 'PUT'
        headers: {
          "Content-Type": "application/json",
+         'Access-Control-Allow-Origin' : '*'
        },
-       body: JSON.stringify(email),
+       body: JSON.stringify(datap),
      })
-       .then((response) => response.json())
-       .then((data) => {
-         console.log("Success:", email);
-       })
-       .catch((error) => {
-         console.error("Error:", error);
-       });
-
-      setEmail("")
+     .then((res)=> {console.log(res)
+        if(res.state === 201){
+            alert("success");
+        }
+    })
+     .catch((e)=> console.log(e))
+       
   }
  
 
@@ -50,8 +57,7 @@ const [email,setEmail]=useState();
       </div>
 
       <div>
-          <input type="text" name="email" onChange={(e)=>setEmail(e.target.value)} placeholder="Email"/>
-          {console.log("Email", email)}
+          
           <button onClick={AddPost}>Submit</button>
       </div>
     </>
