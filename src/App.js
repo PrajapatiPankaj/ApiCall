@@ -1,48 +1,51 @@
-import { useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
   const url = "https://jsonplaceholder.typicode.com/users";
-const [data , setData] = useState([])
+  const [data, setData] = useState([]);
 
   // For Get Api call//
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
-      .then((json)=>{
-            //  console.log(json);
-              setData(json);
-          })
+      .then((json) => {
+        //  console.log(json);
+        setData(json);
+      })
       .catch((e) => console.log("e", e));
   }, []);
 
-  //For Post Api  Call//
+  //For Put and Post API Call //
+  const AddPost = () => {
+    const data = {
+      id: "216",
+      name: "Pankaj",
+      email: "pankaj@123",
+      phone: "385421",
+      username: "Pankaj Prajapati",
+    };
 
-  const AddPost = ()=>{
+    const url = data.id
+      ? "https://jsonplaceholder.typicode.com/users/" + data.id
+      : "https://jsonplaceholder.typicode.com/users";
 
-      const  datap={
-          name: "Pankaj",
-          email:'pankaj@123',
-          phone:'385421',
-          username: "Pankaj Prajapati"
-        }
-     fetch(url, {
-       method: "POST", // or 'PUT'
-       headers: {
-         "Content-Type": "application/json",
-         'Access-Control-Allow-Origin' : '*'
-       },
-       body: JSON.stringify(datap),
-     })
-     .then((res)=> {console.log(res)
-        if(res.state === 201){
-            alert("success");
-        }
+    fetch(url, {
+      method: data.id ? "PUT" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(data),
     })
-     .catch((e)=> console.log(e))
-       
-  }
- 
+      .then((res) => {
+        console.log(res);
+        if (res.state === 201) {
+          alert("success");
+        }
+      })
+      .catch((e) => console.log(e));
+  };
 
   return (
     <>
@@ -57,8 +60,7 @@ const [data , setData] = useState([])
       </div>
 
       <div>
-          
-          <button onClick={AddPost}>Submit</button>
+        <button onClick={AddPost}>Submit</button>
       </div>
     </>
   );
